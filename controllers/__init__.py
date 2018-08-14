@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-from . import prt_report_controllers
+from . import prt_controllers
 
 
 
