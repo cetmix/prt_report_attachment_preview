@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
 
 <!-- Open attachment in new tab -->
-  <t t-extend="Sidebar">
+  <t t-name="SidebarPlus" t-extend="Sidebar">
     <t t-jquery="a:has(.o_sidebar_delete_attachment)" t-operation="replace">
       <t t-if="section.name == 'files' and !item.callback and item.url">
 				<a t-att-title="item.title or None" t-att-data-section="section.name" t-att-data-index="item_index" t-att-href="item.url or '#'" target="_blank">

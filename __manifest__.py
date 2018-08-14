@@ -9,7 +9,7 @@
     'description': """
     Preview reports and pdf attachments in browser instead of downloading them              
 """,
-    'depends': ['base', 'web', 'document'],
+    'depends': ['base', 'web'],
 
     'data': [
         'views/prt_report_preview_template.xml',
