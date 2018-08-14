@@ -3,6 +3,8 @@ from odoo.http import request, Response
 from odoo.addons.web.controllers.main import ReportController, Binary
 import werkzeug
 
+# List of content types that will be opened in browser
+OPEN_BROWSER_TYPES = ['application/pdf']
 
 ######################
 # Report Controllers #
@@ -38,5 +40,6 @@ class PrtBinaryController(Binary):
                                                               unique=unique, mimetype=mimetype,
                                                               download=download, data=data, token=token,
                                                               access_token=access_token, **kw)
-        res.headers['Content-Disposition'] = res.headers['Content-Disposition'].replace('attachment', 'inline')
+        if res.headers.get('Content-type', 'other') in OPEN_BROWSER_TYPES:
+            res.headers['Content-Disposition'] = res.headers['Content-Disposition'].replace('attachment', 'inline')
         return res
