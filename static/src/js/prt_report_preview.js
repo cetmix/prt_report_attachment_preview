@@ -1,20 +1,14 @@
 odoo.define('prt_report_attachment_preview.ReportPreview', function (require) {
 "use strict";
 
-var core = require('web.core');
-var utils = require('web.utils');
-var time = require('web.time');
-var ajax = require('web.ajax');
-console.log("Ajax");
-console.log(ajax);
-ajax.include({
+var Session = require('web.Session');
 
-  // Get File
-  get_file: function(options) {
+// session
+Session.include({
+
+    get_file: function(options) {
       var token = new Date().getTime();
-      console.log("Options");
-      console.log(options);
-
+      options.session = this;
       var params = _.extend({}, options.data || {}, {token: token});
       var url = options.session.url(options.url, params);
       if (options.complete) { options.complete(); }
@@ -26,6 +20,6 @@ ajax.include({
       }
       return true;
     },
- // End
   });
+
 });
