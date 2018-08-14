@@ -2,8 +2,11 @@ odoo.define('prt_report_attachment_preview.ReportPreview', function (require) {
 "use strict";
 
 var Session = require('web.Session');
+var core = require('web.core');
+var QWeb = core.qweb;
+var Sidebar = require('web.Sidebar');
 
-// session
+// Session
 Session.include({
 
     get_file: function(options) {
@@ -19,6 +22,16 @@ Session.include({
           return false;
       }
       return true;
+    },
+  });
+
+// Sidebar
+Sidebar.include({
+
+  _redraw: function () {
+    var self = this;
+    this._super.apply(this, arguments);
+    self.$el.find("a[href]").attr('target', '_blank');
     },
   });
 
