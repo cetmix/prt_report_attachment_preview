@@ -1,38 +1,41 @@
 odoo.define('prt_report_attachment_preview.ReportPreview', function (require) {
 "use strict";
 
-var Session = require('web.Session');
+var ActionManager = require('web.ActionManager');
 var core = require('web.core');
-var QWeb = core.qweb;
-var Sidebar = require('web.Sidebar');
+var crash_manager = require('web.crash_manager');
+var framework = require('web.framework');
+var session = require('web.session');
+var _t = core._t;
 
-// Session
-Session.include({
+// Action Manager
+ActionManager.include({
+    //--------------------------------------------------------------------------
+    // Private
+    //--------------------------------------------------------------------------
 
-    get_file: function(options) {
-      var token = new Date().getTime();
-      options.session = this;
-      var params = _.extend({}, options.data || {}, {token: token});
-      var url = options.session.url(options.url, params);
-      if (options.complete) { options.complete(); }
+    /**
+     * Downloads a PDF report for the given url. It blocks the UI during the
+     * report generation and download.
+     *
+     * @param {string} url
+     * @returns {Deferred} resolved when the report has been downloaded ;
+     *   rejected if something went wrong during the report generation
+     */
+    _downloadReport: function (url) {
+        var def = $.Deferred();
 
-      var w = window.open(url);
-      if (!w || w.closed || typeof w.closed === 'undefined') {
-          // popup was blocked
-          return false;
-      }
-      return true;
-    },
-  });
+        if (!window.open(url)) {
+            // AAB: this check should be done in get_file service directly,
+            // should not be the concern of the caller (and that way, get_file
+            // could return a deferred)
+            var message = _t('A popup window with your report was blocked. You ' +
+                             'may need to change your browser settings to allow ' +
+                             'popup windows for this page.');
+            this.do_warn(_t('Warning'), message, true);
+                    }
 
-// Sidebar
-Sidebar.include({
-
-  _redraw: function () {
-    var self = this;
-    this._super.apply(this, arguments);
-    self.$el.find("a[href]").attr('target', '_blank');
-    },
-  });
-
+        return def;
+            },
+    })
 });

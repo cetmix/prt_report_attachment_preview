@@ -1,45 +1,60 @@
 from odoo import http
-from odoo.http import request, Response
-from odoo.addons.web.controllers.main import ReportController, Binary
+from odoo.http import request
+from odoo.tools.safe_eval import safe_eval
+from odoo.addons.web.controllers.main import ReportController
 import werkzeug
+import json
+import time
 
 # List of content types that will be opened in browser
 OPEN_BROWSER_TYPES = ['application/pdf']
+
 
 ######################
 # Report Controllers #
 ######################
 class PrtReportController(ReportController):
+    @http.route([
+        '/report/<converter>/<reportname>',
+        '/report/<converter>/<reportname>/<docids>',
+    ], type='http', auth='user', website=True)
+    def report_routes(self, reportname, docids=None, converter=None, **data):
+        report = request.env['ir.actions.report']._get_report_from_name(reportname)
+        context = dict(request.env.context)
 
-    @http.route(['/report/download'], type='http', auth="user")
-    def report_download(self, data, token):
-        res = super(PrtReportController, self).report_download(data, token)
-        res.headers['Content-Disposition'] = res.headers['Content-Disposition'].replace('attachment', 'inline')
-        return res
+        if docids:
+            docids = [int(i) for i in docids.split(',')]
+        if data.get('options'):
+            data.update(json.loads(data.pop('options')))
+        if data.get('context'):
+            # Ignore 'lang' here, because the context in data is the one from the webclient *but* if
+            # the user explicitely wants to change the lang, this mechanism overwrites it.
+            data['context'] = json.loads(data['context'])
+            if data['context'].get('lang'):
+                del data['context']['lang']
+            context.update(data['context'])
+        if converter == 'html':
+            html = report.with_context(context).render_qweb_html(docids, data=data)[0]
+            return request.make_response(html)
+        elif converter == 'pdf':
+            pdf = report.with_context(context).render_qweb_pdf(docids, data=data)[0]
 
+            # Get filename for report
+            if len(docids) > 1:
+                filepart = "%s (x%s)" % (request.env['ir.model'].sudo().search([('model', '=', report.model)]).name, str(len(docids)))
+            elif len(docids) == 1:
+                obj = request.env[report.model].browse(docids)
+                if report.print_report_name:
+                    filepart = safe_eval(report.print_report_name, {'object': obj, 'time': time})
+            else:
+                filepart = "report"
 
-######################
-# Binary Controllers #
-######################
-class PrtBinaryController(Binary):
-    @http.route(['/web/content',
-        '/web/content/<string:xmlid>',
-        '/web/content/<string:xmlid>/<string:filename>',
-        '/web/content/<int:id>',
-        '/web/content/<int:id>/<string:filename>',
-        '/web/content/<int:id>-<string:unique>',
-        '/web/content/<int:id>-<string:unique>/<string:filename>',
-        '/web/content/<string:model>/<int:id>/<string:field>',
-        '/web/content/<string:model>/<int:id>/<string:field>/<string:filename>'], type='http', auth="public")
-    def content_common(self, xmlid=None, model='ir.attachment', id=None, field='datas',
-                       filename=None, filename_field='datas_fname', unique=None, mimetype=None,
-                       download=None, data=None, token=None, access_token=None, **kw):
-
-        res = super(PrtBinaryController, self).content_common(xmlid=xmlid, model=model, id=id, field=field,
-                                                              filename=filename, filename_field=filename_field,
-                                                              unique=unique, mimetype=mimetype,
-                                                              download=download, data=data, token=token,
-                                                              access_token=access_token, **kw)
-        if res.headers.get('Content-type', 'other') in OPEN_BROWSER_TYPES:
-            res.headers['Content-Disposition'] = res.headers['Content-Disposition'].replace('attachment', 'inline')
-        return res
+            pdfhttpheaders = [('Content-Type', 'application/pdf'), ('Content-Length', len(pdf)),
+                              ('Content-Disposition', 'filename="%s.pdf"' % (filepart))]
+            return request.make_response(pdf, headers=pdfhttpheaders)
+        elif converter == 'text':
+            text = report.with_context(context).render_qweb_text(docids, data=data)[0]
+            texthttpheaders = [('Content-Type', 'text/plain'), ('Content-Length', len(text))]
+            return request.make_response(text, headers=texthttpheaders)
+        else:
+            raise werkzeug.exceptions.HTTPException(description='Converter %s not implemented.' % converter)
