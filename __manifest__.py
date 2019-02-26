@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Open PDF Reports and PDF Attachments in Browser',
-    'version': '12.0.1.0',
+    'version': '12.0.1.1',
     'summary': """Open PDF Reports and PDF Attachments in Browser""",
     'author': 'Ivan Sokolov',
     'category': 'Productivity',
