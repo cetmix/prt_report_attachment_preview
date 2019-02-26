@@ -40,12 +40,13 @@ class PrtReportController(ReportController):
             pdf = report.with_context(context).render_qweb_pdf(docids, data=data)[0]
 
             # Get filename for report
-            if len(docids) > 1:
-                filepart = "%s (x%s)" % (request.env['ir.model'].sudo().search([('model', '=', report.model)]).name, str(len(docids)))
-            elif len(docids) == 1:
-                obj = request.env[report.model].browse(docids)
-                if report.print_report_name:
-                    filepart = safe_eval(report.print_report_name, {'object': obj, 'time': time})
+            if docids:
+                if len(docids) > 1:
+                    filepart = "%s (x%s)" % (request.env['ir.model'].sudo().search([('model', '=', report.model)]).name, str(len(docids)))
+                elif len(docids) == 1:
+                    obj = request.env[report.model].browse(docids)
+                    if report.print_report_name:
+                        filepart = safe_eval(report.print_report_name, {'object': obj, 'time': time})
             else:
                 filepart = "report"
 
