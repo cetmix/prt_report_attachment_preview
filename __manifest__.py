@@ -3,7 +3,7 @@
     'name': 'Open PDF Reports and PDF Attachments in Browser',
     'version': '10.0.1.0',
     'summary': """Open PDF Reports and PDF Attachments in Browser""",
-    'author': ['Ivan Sokolov', 'Ahmed Khakwani'],
+    'author': 'Ivan Sokolov, Ahmed Khakwani',
     'category': 'Productivity',
     'license': 'GPL-3',
     'website': 'https://demo.cetmix.com',
