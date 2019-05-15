@@ -14,6 +14,9 @@ Session.include({
       options.session = this;
       var params = _.extend({}, options.data || {}, {token: token});
       var url = options.session.url(options.url, params);
+      if (url.indexOf('report/download') == -1)      {
+            return this._super.apply(this, arguments);
+            }
       if (options.complete) { options.complete(); }
 
       var w = window.open(url);
