@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Preview Report PDF in Browser',
-    'version': '10.0.1.0',
+    'version': '10.0.1.1',
     'summary': """Preview PDF Reports in Browser""",
     'author': 'Ivan Sokolov, Ahmed Khakwani',
     'category': 'Productivity',
