@@ -1,2 +1,6 @@
 # Add any directories, files, or patterns you don't want to be tracked by version control
 *.pyc
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/prt_report_attachment_preview.iml
+/.idea/vcs.xml
