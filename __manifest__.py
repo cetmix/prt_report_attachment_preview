@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Open PDF Reports and PDF Attachments in Browser',
-    'version': '12.0.1.1',
+    'version': '13.0.1.0',
     'summary': """Open PDF Reports and PDF Attachments in Browser""",
-    'author': 'Ivan Sokolov',
+    'author': 'Ivan Sokolov, Cetmix',
     'category': 'Productivity',
     'license': 'GPL-3',
     'website': 'https://demo.cetmix.com',
@@ -15,7 +15,7 @@
     'depends': ['base', 'web'],
     'images': ['static/description/banner.png'],
     'data': [
-        'views/prt_report_preview_template.xml',
+        'views/cetmix_report_preview_template.xml',
     ],
     'installable': True,
     'application': True,

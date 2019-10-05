@@ -1,9 +1,4 @@
-`12.0.1.1`
+`13.0.1.0`
 ----------
 
-- Bug fixes
-
-`12.0.1.0`
-----------
-
-- Release for Odoo 12
+- Release for Odoo 13

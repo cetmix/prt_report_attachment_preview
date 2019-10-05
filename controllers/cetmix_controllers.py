@@ -37,12 +37,12 @@ class PrtReportController(ReportController):
             html = report.with_context(context).render_qweb_html(docids, data=data)[0]
             return request.make_response(html)
         elif converter == 'pdf':
-            pdf = report.with_context(context).render_qweb_pdf(docids, data=data)[0]
 
             # Get filename for report
             if docids:
                 if len(docids) > 1:
-                    filepart = "%s (x%s)" % (request.env['ir.model'].sudo().search([('model', '=', report.model)]).name, str(len(docids)))
+                    filepart = "%s (x%s)" % (
+                    request.env['ir.model'].sudo().search([('model', '=', report.model)]).name, str(len(docids)))
                 elif len(docids) == 1:
                     obj = request.env[report.model].browse(docids)
                     if report.print_report_name:
@@ -50,8 +50,9 @@ class PrtReportController(ReportController):
             else:
                 filepart = "report"
 
+            pdf = report.with_context(context).render_qweb_pdf(docids, data=data)[0]
             pdfhttpheaders = [('Content-Type', 'application/pdf'), ('Content-Length', len(pdf)),
-                              ('Content-Disposition', 'filename="%s.pdf"' % (filepart))]
+                              ('Content-Disposition', 'filename="%s.pdf"' % filepart)]
             return request.make_response(pdf, headers=pdfhttpheaders)
         elif converter == 'text':
             text = report.with_context(context).render_qweb_text(docids, data=data)[0]

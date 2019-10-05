@@ -3,7 +3,6 @@ odoo.define('prt_report_attachment_preview.ReportPreview', function (require) {
 
 var ActionManager = require('web.ActionManager');
 var core = require('web.core');
-var crash_manager = require('web.crash_manager');
 var framework = require('web.framework');
 var session = require('web.session');
 var _t = core._t;
@@ -24,6 +23,7 @@ ActionManager.include({
      */
     _downloadReport: function (url) {
         var def = $.Deferred();
+        console.log("Report!",url)
 
         if (!window.open(url)) {
             // AAB: this check should be done in get_file service directly,
