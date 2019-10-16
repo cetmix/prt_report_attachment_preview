@@ -39,6 +39,8 @@ class PrtReportController(ReportController):
         elif converter == 'pdf':
 
             # Get filename for report
+            filepart = "report"
+
             if docids:
                 if len(docids) > 1:
                     filepart = "%s (x%s)" % (
@@ -47,8 +49,6 @@ class PrtReportController(ReportController):
                     obj = request.env[report.model].browse(docids)
                     if report.print_report_name:
                         filepart = safe_eval(report.print_report_name, {'object': obj, 'time': time})
-            else:
-                filepart = "report"
 
             pdf = report.with_context(context).render_qweb_pdf(docids, data=data)[0]
             pdfhttpheaders = [('Content-Type', 'application/pdf'), ('Content-Length', len(pdf)),
