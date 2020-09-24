@@ -1,10 +1,12 @@
-from odoo import http
-from odoo.http import request
-from odoo.tools.safe_eval import safe_eval
-from odoo.addons.web.controllers.main import ReportController
-import werkzeug
 import json
 import time
+
+import werkzeug
+from odoo import http
+from odoo.addons.http_routing.models.ir_http import slugify
+from odoo.addons.web.controllers.main import ReportController
+from odoo.http import request
+from odoo.tools.safe_eval import safe_eval
 
 # List of content types that will be opened in browser
 OPEN_BROWSER_TYPES = ['application/pdf']
@@ -22,13 +24,16 @@ class PrtReportController(ReportController):
         report = request.env['ir.actions.report']._get_report_from_name(reportname)
         context = dict(request.env.context)
 
+        # Get filename for report
+        filepart = "report"
+
         if docids:
             docids = [int(i) for i in docids.split(',')]
         if data.get('options'):
             data.update(json.loads(data.pop('options')))
         if data.get('context'):
             # Ignore 'lang' here, because the context in data is the one from the webclient *but* if
-            # the user explicitely wants to change the lang, this mechanism overwrites it.
+            # the user explicitly wants to change the lang, this mechanism overwrites it.
             data['context'] = json.loads(data['context'])
             if data['context'].get('lang'):
                 del data['context']['lang']
@@ -42,7 +47,8 @@ class PrtReportController(ReportController):
             # Get filename for report
             if docids:
                 if len(docids) > 1:
-                    filepart = "%s (x%s)" % (request.env['ir.model'].sudo().search([('model', '=', report.model)]).name, str(len(docids)))
+                    filepart = "%s (x%s)" % (
+                    request.env['ir.model'].sudo().search([('model', '=', report.model)]).name, str(len(docids)))
                 elif len(docids) == 1:
                     obj = request.env[report.model].browse(docids)
                     if report.print_report_name:
@@ -51,7 +57,7 @@ class PrtReportController(ReportController):
                 filepart = "report"
 
             pdfhttpheaders = [('Content-Type', 'application/pdf'), ('Content-Length', len(pdf)),
-                              ('Content-Disposition', 'filename="%s.pdf"' % (filepart))]
+                              ('Content-Disposition', 'filename="%s.pdf"' % slugify(filepart))]
             return request.make_response(pdf, headers=pdfhttpheaders)
         elif converter == 'text':
             text = report.with_context(context).render_qweb_text(docids, data=data)[0]
