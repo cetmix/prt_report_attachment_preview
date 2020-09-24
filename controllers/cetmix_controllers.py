@@ -5,6 +5,7 @@ from odoo.addons.web.controllers.main import ReportController
 import werkzeug
 import json
 import time
+from odoo.addons.http_routing.models.ir_http import slugify
 
 # List of content types that will be opened in browser
 OPEN_BROWSER_TYPES = ['application/pdf']
@@ -52,7 +53,7 @@ class PrtReportController(ReportController):
 
             pdf = report.with_context(context).render_qweb_pdf(docids, data=data)[0]
             pdfhttpheaders = [('Content-Type', 'application/pdf'), ('Content-Length', len(pdf)),
-                              ('Content-Disposition', 'filename="%s.pdf"' % filepart)]
+                              ('Content-Disposition', 'filename="%s.pdf"' % slugify(filepart))]
             return request.make_response(pdf, headers=pdfhttpheaders)
         elif converter == 'text':
             text = report.with_context(context).render_qweb_text(docids, data=data)[0]

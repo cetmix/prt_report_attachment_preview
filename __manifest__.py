@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Open PDF Reports and PDF Attachments in Browser',
-    'version': '13.0.1.0',
+    'version': '13.0.1.1',
     'summary': """Open PDF Reports and PDF Attachments in Browser""",
     'author': 'Ivan Sokolov, Cetmix',
     'category': 'Productivity',
-    'license': 'GPL-3',
-    'website': 'https://demo.cetmix.com',
+    'license': 'LGPL-3',
+    'website': 'https://cetmix.com',
     'live_test_url': 'https://demo.cetmix.com',
     'description': """
     Preview reports and pdf attachments in browser instead of downloading them.
