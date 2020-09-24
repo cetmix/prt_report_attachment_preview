@@ -1,7 +1,5 @@
 from odoo import http
-from odoo.http import request, Response
 from odoo.addons.web.controllers.main import ReportController, Binary
-import werkzeug
 
 # List of content types that will be opened in browser
 OPEN_BROWSER_TYPES = ['application/pdf']
@@ -24,14 +22,14 @@ class PrtReportController(ReportController):
 ######################
 class PrtBinaryController(Binary):
     @http.route(['/web/content',
-        '/web/content/<string:xmlid>',
-        '/web/content/<string:xmlid>/<string:filename>',
-        '/web/content/<int:id>',
-        '/web/content/<int:id>/<string:filename>',
-        '/web/content/<int:id>-<string:unique>',
-        '/web/content/<int:id>-<string:unique>/<string:filename>',
-        '/web/content/<string:model>/<int:id>/<string:field>',
-        '/web/content/<string:model>/<int:id>/<string:field>/<string:filename>'], type='http', auth="public")
+                 '/web/content/<string:xmlid>',
+                 '/web/content/<string:xmlid>/<string:filename>',
+                 '/web/content/<int:id>',
+                 '/web/content/<int:id>/<string:filename>',
+                 '/web/content/<int:id>-<string:unique>',
+                 '/web/content/<int:id>-<string:unique>/<string:filename>',
+                 '/web/content/<string:model>/<int:id>/<string:field>',
+                 '/web/content/<string:model>/<int:id>/<string:field>/<string:filename>'], type='http', auth="public")
     def content_common(self, xmlid=None, model='ir.attachment', id=None, field='datas',
                        filename=None, filename_field='datas_fname', unique=None, mimetype=None,
                        download=None, data=None, token=None, access_token=None, **kw):

@@ -1,41 +1,42 @@
 odoo.define('prt_report_attachment_preview.ReportPreview', function (require) {
-"use strict";
+    "use strict";
 
-var Session = require('web.Session');
-var core = require('web.core');
-var QWeb = core.qweb;
-var Sidebar = require('web.Sidebar');
+    var Session = require('web.Session');
+    var core = require('web.core');
+    var Sidebar = require('web.Sidebar');
 
 // Session
-Session.include({
+    Session.include({
 
-    get_file: function(options) {
-      var token = new Date().getTime();
-      options.session = this;
-      var params = _.extend({}, options.data || {}, {token: token});
-      var url = options.session.url(options.url, params);
-      if (url.indexOf('report/download') == -1)      {
-            return this._super.apply(this, arguments);
+        get_file: function (options) {
+            var token = new Date().getTime();
+            options.session = this;
+            var params = _.extend({}, options.data || {}, {token: token});
+            var url = options.session.url(options.url, params);
+            if (url.indexOf('report/download') == -1) {
+                return this._super.apply(this, arguments);
             }
-      if (options.complete) { options.complete(); }
+            if (options.complete) {
+                options.complete();
+            }
 
-      var w = window.open(url);
-      if (!w || w.closed || typeof w.closed === 'undefined') {
-          // popup was blocked
-          return false;
-      }
-      return true;
-    },
-  });
+            var w = window.open(url);
+            if (!w || w.closed || typeof w.closed === 'undefined') {
+                // popup was blocked
+                return false;
+            }
+            return true;
+        },
+    });
 
 // Sidebar
-Sidebar.include({
+    Sidebar.include({
 
-  _redraw: function () {
-    var self = this;
-    this._super.apply(this, arguments);
-    self.$el.find("a[href]").attr('target', '_blank');
-    },
-  });
+        _redraw: function () {
+            var self = this;
+            this._super.apply(this, arguments);
+            self.$el.find("a[href]").attr('target', '_blank');
+        },
+    });
 
 });
