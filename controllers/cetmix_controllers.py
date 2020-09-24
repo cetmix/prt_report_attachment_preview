@@ -1,11 +1,12 @@
-from odoo import http
-from odoo.http import request
-from odoo.tools.safe_eval import safe_eval
-from odoo.addons.web.controllers.main import ReportController
-import werkzeug
 import json
 import time
+
+import werkzeug
+from odoo import http
 from odoo.addons.http_routing.models.ir_http import slugify
+from odoo.addons.web.controllers.main import ReportController
+from odoo.http import request
+from odoo.tools.safe_eval import safe_eval
 
 # List of content types that will be opened in browser
 OPEN_BROWSER_TYPES = ['application/pdf']

@@ -3,8 +3,6 @@ odoo.define('prt_report_attachment_preview.ReportPreview', function (require) {
 
 var ActionManager = require('web.ActionManager');
 var core = require('web.core');
-var framework = require('web.framework');
-var session = require('web.session');
 var _t = core._t;
 
 // Action Manager
