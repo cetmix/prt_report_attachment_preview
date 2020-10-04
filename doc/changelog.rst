@@ -1,9 +1,4 @@
-13.0.1.1
+14.0.1.0.0
 -----------
 
-- Release for Odoo 13
-
-13.0.1.0
------------
-
-- Release for Odoo 13
+- Release for Odoo 14
