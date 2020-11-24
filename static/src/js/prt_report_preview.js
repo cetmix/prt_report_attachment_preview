@@ -1,19 +1,20 @@
-odoo.define('prt_report_attachment_preview.ReportPreview', function (require) {
+odoo.define("prt_report_attachment_preview.ReportPreview", function(require) {
     "use strict";
 
-    var Session = require('web.Session');
-    var core = require('web.core');
-    var Sidebar = require('web.Sidebar');
+    var Session = require("web.Session");
+    var Sidebar = require("web.Sidebar");
 
-// Session
+    // Session
     Session.include({
-
-        get_file: function (options) {
+        get_file: function(options) {
             var token = new Date().getTime();
             options.session = this;
             var params = _.extend({}, options.data || {}, {token: token});
             var url = options.session.url(options.url, params);
-            if (url.indexOf('report/download') == -1) {
+            if (
+                url.indexOf("report/download") === -1 &&
+                url.indexOf("web/content") === -1
+            ) {
                 return this._super.apply(this, arguments);
             }
             if (options.complete) {
@@ -21,22 +22,20 @@ odoo.define('prt_report_attachment_preview.ReportPreview', function (require) {
             }
 
             var w = window.open(url);
-            if (!w || w.closed || typeof w.closed === 'undefined') {
-                // popup was blocked
+            if (!w || w.closed || typeof w.closed === "undefined") {
+                // Popup was blocked
                 return false;
             }
             return true;
         },
     });
 
-// Sidebar
+    // Sidebar
     Sidebar.include({
-
-        _redraw: function () {
+        _redraw: function() {
             var self = this;
             this._super.apply(this, arguments);
-            self.$el.find("a[href]").attr('target', '_blank');
+            self.$el.find("a[href]").attr("target", "_blank");
         },
     });
-
 });
