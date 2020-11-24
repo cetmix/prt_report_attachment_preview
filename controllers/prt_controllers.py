@@ -58,7 +58,7 @@ class PrtBinaryController(Binary):
         res = super(PrtBinaryController, self).content_common(
             xmlid=xmlid,
             model=model,
-            f_id=f_id,
+            id=f_id,
             field=field,
             filename=filename,
             filename_field=filename_field,
