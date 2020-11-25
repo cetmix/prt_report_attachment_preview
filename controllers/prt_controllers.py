@@ -7,7 +7,7 @@ OPEN_BROWSER_TYPES = ["application/pdf"]
 
 
 ######################
-# Report Controllers #
+# Report Controllers
 ######################
 class PrtReportController(ReportController):
     @http.route(["/report/download"], type="http", auth="user")
@@ -20,7 +20,7 @@ class PrtReportController(ReportController):
 
 
 ######################
-# Binary Controllers #
+# Binary Controllers
 ######################
 class PrtBinaryController(Binary):
     @http.route(
@@ -42,7 +42,7 @@ class PrtBinaryController(Binary):
         self,
         xmlid=None,
         model="ir.attachment",
-        f_id=None,
+        id=None,
         field="datas",
         filename=None,
         filename_field="datas_fname",
@@ -58,7 +58,7 @@ class PrtBinaryController(Binary):
         res = super(PrtBinaryController, self).content_common(
             xmlid=xmlid,
             model=model,
-            id=f_id,
+            id=id,
             field=field,
             filename=filename,
             filename_field=filename_field,
