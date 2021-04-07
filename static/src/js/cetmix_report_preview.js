@@ -20,8 +20,6 @@ odoo.define("prt_report_attachment_preview.ReportPreview", function(require) {
          *   rejected if something went wrong during the report generation
          */
         _downloadReport: function(url) {
-            console.log("Report!", url);
-
             if (!window.open(url)) {
                 // AAB: this check should be done in get_file service directly,
                 // should not be the concern of the caller (and that way, get_file
