@@ -1,6 +1,6 @@
 {
     "name": "Open PDF Reports and PDF Attachments in Browser",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "summary": """Open PDF Reports and PDF Attachments in Browser""",
     "author": "Ivan Sokolov, Cetmix",
     "category": "Productivity",
